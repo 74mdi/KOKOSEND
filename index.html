@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KokoSend | Minimalist Message Dispatcher</title>
     <meta name="description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -17,10 +18,10 @@
     <meta property="twitter:title" content="KokoSend" />
     <meta property="twitter:description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Simplified to standard weights to prevent MIME errors -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -47,6 +48,9 @@
                 800: '#27272a',
                 900: '#18181b',
                 950: '#09090b',
+              },
+              discord: {
+                blurple: '#5865F2',
               }
             }
           }
@@ -61,7 +65,9 @@
     "vite": "https://esm.sh/vite@^7.3.1",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "react-markdown": "https://esm.sh/react-markdown@9",
+    "date-fns": "https://esm.sh/date-fns@3"
   }
 }
 </script>

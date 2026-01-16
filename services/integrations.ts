@@ -1,4 +1,4 @@
-import { Attachment } from '../types';
+import { Attachment, DiscordEmbed } from '../types';
 
 // Constants
 const DISCORD_LIMIT = 2000;
@@ -18,7 +18,8 @@ const createTextFile = (content: string, filename: string = 'message.txt'): File
 export const sendToDiscord = async (
   webhookUrl: string, 
   text: string, 
-  attachments: Attachment[]
+  attachments: Attachment[],
+  embed?: DiscordEmbed
 ): Promise<void> => {
   const formData = new FormData();
   let finalContent = text;
@@ -27,14 +28,27 @@ export const sendToDiscord = async (
   if (text.length > DISCORD_LIMIT) {
     finalContent = "⚠️ Message exceeded 2000 characters. Full text attached below.";
     const textFile = createTextFile(text, 'full_message.txt');
-    formData.append('files[99]', textFile); // 99 to ensure it doesn't overwrite user files
+    // Using a specific key for overflow text to ensure it's treated as a file
+    formData.append('files[99]', textFile); 
   }
 
-  // Discord allows multipart/form-data with 'content' and 'file' fields
-  if (finalContent) {
-    formData.append('content', finalContent);
+  // Construct JSON Payload for Embeds + Content
+  const payload: any = {};
+  
+  if (finalContent) payload.content = finalContent;
+  
+  if (embed && (embed.title || embed.description)) {
+    payload.embeds = [{
+      title: embed.title,
+      description: embed.description,
+      color: embed.color ? parseInt(embed.color.replace('#', ''), 16) : undefined,
+      url: embed.url
+    }];
   }
 
+  formData.append('payload_json', JSON.stringify(payload));
+
+  // Append attachments
   attachments.forEach((att, index) => {
     formData.append(`files[${index}]`, att.file);
   });

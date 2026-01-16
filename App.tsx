@@ -136,17 +136,25 @@ export default function App() {
   const handleRetry = useCallback(async (platform: 'discord' | 'telegram') => {
     if (isSending) return;
     
+    // Check config before attempting retry to avoid unnecessary errors
+    if (platform === 'discord' && !config.discordWebhook) {
+        setIsSettingsOpen(true);
+        return;
+    }
+    if (platform === 'telegram' && (!config.telegramBotToken || !config.telegramChatId)) {
+        setIsSettingsOpen(true);
+        return;
+    }
+    
     setIsSending(true);
     // Set status to pending for the retrying platform to show spinner
     setStatus(prev => prev ? ({ ...prev, [platform]: 'pending' }) : null);
 
     try {
       if (platform === 'discord') {
-         if (!config.discordWebhook) throw new Error("Missing Discord Webhook URL");
          const embedData = showEmbedBuilder ? embedConfig : undefined;
          await sendToDiscord(config.discordWebhook, message, attachments, embedData);
       } else {
-         if (!config.telegramBotToken || !config.telegramChatId) throw new Error("Missing Telegram Credentials");
          let finalMsg = message;
          // Append embed content for Telegram if it exists
          if (showEmbedBuilder && (embedConfig.title || embedConfig.description)) {
@@ -601,7 +609,7 @@ export default function App() {
 
                      <button
                       onClick={handleSend}
-                      disabled={isSending || (!message && attachments.length === 0 && (!showEmbedBuilder || !embedConfig.title))}
+                      disabled={isSending || (!message.trim() && attachments.length === 0 && (!showEmbedBuilder || !embedConfig.title))}
                       className="w-full md:w-auto px-8 py-3 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-200 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/20 group relative flex items-center justify-center min-w-[160px]"
                      >
                         {isSending ? (

@@ -83,12 +83,30 @@ export default function App() {
   // --- Handlers ---
   const handleFileSelect = (files: FileList | null) => {
     if (files && files.length > 0) {
-      const newAttachments: Attachment[] = (Array.from(files) as File[]).map(file => ({
-        file,
-        id: crypto.randomUUID(),
-        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
-      }));
-      setAttachments(prev => [...prev, ...newAttachments]);
+      const fileArray = Array.from(files);
+      const validFiles: File[] = [];
+      let skippedCount = 0;
+
+      fileArray.forEach(file => {
+          if (file.size > 0) {
+              validFiles.push(file);
+          } else {
+              skippedCount++;
+          }
+      });
+
+      if (skippedCount > 0) {
+          alert(`Skipped ${skippedCount} empty file(s) (0 bytes).`);
+      }
+
+      if (validFiles.length > 0) {
+        const newAttachments: Attachment[] = validFiles.map(file => ({
+          file,
+          id: crypto.randomUUID(),
+          preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
+        }));
+        setAttachments(prev => [...prev, ...newAttachments]);
+      }
     }
     // Reset input
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -106,10 +124,15 @@ export default function App() {
     e.preventDefault();
     setIsDragging(true);
   };
+  
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragging(false);
+    // Only stop dragging if we leave the main container, avoiding flicker when entering children
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+        setIsDragging(false);
+    }
   };
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);

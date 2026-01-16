@@ -67,6 +67,8 @@ export const sendToDiscord = async (
  * Helper to determine Telegram method and send a single file
  */
 const sendTelegramFile = async (baseUrl: string, chatId: string, file: File) => {
+  if (file.size === 0) return; // Skip empty files
+
   const formData = new FormData();
   formData.append('chat_id', chatId);
   
@@ -132,15 +134,31 @@ export const sendToTelegram = async (
       textFileToSend = createTextFile(text, 'full_message.txt');
     }
 
-    // Send the primary text message
-    const params = new URLSearchParams({
-      chat_id: chatId,
-      text: textToSend,
-      parse_mode: 'Markdown',
-    });
-    
-    const textRes = await fetch(`${baseUrl}/sendMessage?${params.toString()}`);
-    if (!textRes.ok) throw new Error(`Telegram Text Error: ${textRes.status}`);
+    // Helper to send text with retry logic for markdown parsing
+    const attemptSendText = async (parseMode?: string) => {
+        const params: Record<string, string> = {
+            chat_id: chatId,
+            text: textToSend,
+        };
+        if (parseMode) params.parse_mode = parseMode;
+        
+        const res = await fetch(`${baseUrl}/sendMessage?${new URLSearchParams(params).toString()}`);
+        const json = await res.json().catch(() => ({}));
+        return { ok: res.ok, status: res.status, json };
+    };
+
+    // Try Markdown first
+    let result = await attemptSendText('Markdown');
+
+    // If parsing failed (Error 400 with specific description), retry as plain text
+    if (!result.ok && result.status === 400 && result.json?.description?.includes('parse entities')) {
+        console.warn('Telegram Markdown parsing failed, retrying as plain text...');
+        result = await attemptSendText(undefined);
+    }
+
+    if (!result.ok) {
+         throw new Error(`Telegram Text Error: ${result.status} ${result.json?.description || ''}`);
+    }
 
     // If text was too long, send the overflow file immediately
     if (textFileToSend) {
@@ -148,11 +166,14 @@ export const sendToTelegram = async (
     }
   }
 
+  // Filter out empty files
+  const validAttachments = attachments.filter(a => a.file.size > 0);
+
   // 2. Separate attachments into Media Group (Photos/Videos) vs Documents
   const mediaGroupFiles: File[] = [];
   const individualFiles: File[] = [];
 
-  attachments.forEach(att => {
+  validAttachments.forEach(att => {
     const mime = att.file.type;
     if (mime.startsWith('image/') || mime.startsWith('video/')) {
       mediaGroupFiles.push(att.file);

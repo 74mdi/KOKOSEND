@@ -1,0 +1,5 @@
+{
+  "name": "KokoSend",
+  "description": "A minimalist, secure client-side message dispatcher for Discord and Telegram with smart attachment handling.",
+  "requestFramePermissions": []
+}

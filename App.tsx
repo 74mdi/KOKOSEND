@@ -18,7 +18,8 @@ import {
   Clock,
   LayoutTemplate,
   Eye,
-  Edit2
+  Edit2,
+  RefreshCw
 } from 'lucide-react';
 import { SettingsModal } from './components/SettingsModal';
 import { HistoryModal } from './components/HistoryModal';
@@ -131,6 +132,67 @@ export default function App() {
     setStatus(null);
     setEmbedConfig({ title: '', description: '', color: '#5865F2' });
   };
+
+  const handleRetry = useCallback(async (platform: 'discord' | 'telegram') => {
+    if (isSending) return;
+    
+    setIsSending(true);
+    // Set status to pending for the retrying platform to show spinner
+    setStatus(prev => prev ? ({ ...prev, [platform]: 'pending' }) : null);
+
+    try {
+      if (platform === 'discord') {
+         if (!config.discordWebhook) throw new Error("Missing Discord Webhook URL");
+         const embedData = showEmbedBuilder ? embedConfig : undefined;
+         await sendToDiscord(config.discordWebhook, message, attachments, embedData);
+      } else {
+         if (!config.telegramBotToken || !config.telegramChatId) throw new Error("Missing Telegram Credentials");
+         let finalMsg = message;
+         // Append embed content for Telegram if it exists
+         if (showEmbedBuilder && (embedConfig.title || embedConfig.description)) {
+             finalMsg += `\n\n**${embedConfig.title}**\n${embedConfig.description}`;
+         }
+         await sendToTelegram(config.telegramBotToken, config.telegramChatId, finalMsg, attachments);
+      }
+
+      setStatus(prev => {
+        if (!prev) return null;
+        const newStatus = { ...prev, [platform]: 'success' };
+        
+        // Check if all active platforms are now successful
+        const allActiveSuccess = Object.entries(newStatus).every(([k, v]) => 
+           v === 'skipped' || v === 'success'
+        );
+
+        if (allActiveSuccess) {
+             const successfulPlatforms = Object.entries(newStatus)
+                .filter(([_, v]) => v === 'success')
+                .map(([k]) => k) as ('discord' | 'telegram')[];
+             
+             addToHistory({
+                 text: message || (showEmbedBuilder ? `[Embed] ${embedConfig.title}` : '[Attachment Only]'),
+                 platforms: successfulPlatforms,
+                 status: 'success'
+             });
+
+            setTimeout(() => {
+                setMessage('');
+                setAttachments([]);
+                setStatus(null);
+                setEmbedConfig({ title: '', description: '', color: '#5865F2' });
+            }, 3000);
+        }
+
+        return newStatus as SendingStatus;
+      });
+
+    } catch (error) {
+      console.error(`Retry ${platform} failed`, error);
+      setStatus(prev => prev ? ({ ...prev, [platform]: 'error' }) : null);
+    } finally {
+      setIsSending(false);
+    }
+  }, [config, message, attachments, showEmbedBuilder, embedConfig, isSending]);
 
   const handleSend = useCallback(async () => {
     if (isSending) return;
@@ -345,9 +407,20 @@ export default function App() {
                           ? <CheckCircle2 className="w-4 h-4" /> 
                           : val === 'error' 
                             ? <AlertCircle className="w-4 h-4" /> 
-                            : <div className="w-4 h-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-600 dark:border-t-zinc-300"/>
+                            : <Clock className="w-4 h-4 animate-pulse" />
                         }
-                        <span className="capitalize">{key}: {val}</span>
+                        <span className={`capitalize flex-1 ${val === 'error' ? 'font-semibold' : ''}`}>{key}: {val}</span>
+
+                        {val === 'error' && (
+                            <button 
+                                onClick={() => handleRetry(key as 'discord' | 'telegram')}
+                                disabled={isSending}
+                                className="p-1 hover:bg-red-200 dark:hover:bg-red-900/40 rounded transition-colors disabled:opacity-50"
+                                title="Retry"
+                            >
+                                <RefreshCw className={`w-4 h-4 ${isSending ? 'animate-spin' : ''}`} />
+                            </button>
+                        )}
                     </div>
                   );
               })}
@@ -529,14 +602,20 @@ export default function App() {
                      <button
                       onClick={handleSend}
                       disabled={isSending || (!message && attachments.length === 0 && (!showEmbedBuilder || !embedConfig.title))}
-                      className="w-full md:w-auto px-8 py-3 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-200 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/20 group relative"
+                      className="w-full md:w-auto px-8 py-3 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-200 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/20 group relative flex items-center justify-center min-w-[160px]"
                      >
-                        {isSending ? 'Sending...' : 'Send Message'}
-                        <div className="hidden md:block absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                          <kbd className="inline-flex h-5 items-center gap-1 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1.5 font-mono text-[10px] font-medium text-zinc-500 dark:text-zinc-400 shadow-sm">
-                            <span className="text-xs">⌘</span>Enter
-                          </kbd>
-                        </div>
+                        {isSending ? (
+                           <Clock className="w-5 h-5 animate-pulse" />
+                        ) : (
+                           'Send Message'
+                        )}
+                        {!isSending && (
+                          <div className="hidden md:block absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            <kbd className="inline-flex h-5 items-center gap-1 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1.5 font-mono text-[10px] font-medium text-zinc-500 dark:text-zinc-400 shadow-sm">
+                              <span className="text-xs">⌘</span>Enter
+                            </kbd>
+                          </div>
+                        )}
                      </button>
                   </div>
                </div>

@@ -29,12 +29,31 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps) {
   const [time, setTime] = useState(new Date());
   
+  // Rotating names state
+  const names = ["7amdi", "QAIIK", "MOHAMED", "74mdi"];
+  const [nameIndex, setNameIndex] = useState(0);
+  const [isBlurry, setIsBlurry] = useState(false);
+
   // Check for secret access parameter
   const showLaunchButton = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('koko');
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Name rotation effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsBlurry(true);
+      // Wait for blur out
+      setTimeout(() => {
+        setNameIndex((prev) => (prev + 1) % names.length);
+        setIsBlurry(false);
+      }, 500);
+    }, 2000); // Change every 2 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -54,8 +73,11 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-700 slide-in-from-bottom-4">
         <div className="max-w-md space-y-8">
-          <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 font-serif leading-relaxed italic">
-            "Simplicity is the ultimate sophistication."
+          <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 font-serif leading-relaxed tracking-wide font-medium">
+            SALAM ANA{' '}
+            <span className={`inline-block transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-sm opacity-50 scale-95' : 'blur-0 opacity-100 scale-100'}`}>
+              {names[nameIndex]}
+            </span>.
           </p>
           
           {showLaunchButton && (

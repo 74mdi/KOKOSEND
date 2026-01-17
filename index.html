@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KokoSend | Secure & Minimalist Message Dispatcher</title>
-    <meta name="description" content="Send messages to Discord Webhooks and Telegram Bots securely from your browser. No server-side storage, 100% client-side, minimalist interface." />
-    <meta name="keywords" content="Discord Webhook Sender, Telegram Bot Sender, Client-side Messaging, Secure Message Dispatcher, KokoSend" />
+    <title>74mdi — MOHAMED</title>
+    <meta name="description" content="MOHAMED — Designer & Developer. Crafting minimalist digital experiences." />
+    <meta name="keywords" content="74mdi, Mohamed, UI/UX Designer, Frontend Developer, KokoSend" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
     <link rel="canonical" href="https://kokosend.app/" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
@@ -18,27 +18,21 @@
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://esm.sh">
 
-    <!-- Module Preloads for Critical JS -->
-    <link rel="modulepreload" href="https://esm.sh/react@^19.2.3">
-    <link rel="modulepreload" href="https://esm.sh/react-dom@^19.2.3/">
-    <link rel="modulepreload" href="https://esm.sh/react-dom@^19.2.3/client">
-
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://kokosend.app/" />
-    <meta property="og:title" content="KokoSend | Secure Message Dispatcher" />
-    <meta property="og:description" content="A minimalist, secure client-side message dispatcher for Discord and Telegram. No login required." />
-    <meta property="og:site_name" content="KokoSend" />
+    <meta property="og:title" content="74mdi — MOHAMED" />
+    <meta property="og:description" content="MOHAMED — Designer & Developer. Crafting minimalist digital experiences." />
+    <meta property="og:site_name" content="74mdi" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="KokoSend" />
-    <meta property="twitter:description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
+    <meta property="twitter:title" content="74mdi" />
+    <meta property="twitter:description" content="MOHAMED — Designer & Developer." />
 
-    <!-- Critical CSS: Prevents FOUC (Flash of Unstyled Content) for background colors -->
     <style>
       body {
-        background-color: #fafafa;
+        background-color: #ffffff;
         color: #18181b;
         margin: 0;
       }
@@ -52,42 +46,19 @@
           color: #fafafa;
         }
       }
-      /* Typographic Selection: High Contrast Inverse */
       ::selection {
-        background-color: #18181b; /* zinc-900 */
-        color: #fafafa; /* zinc-50 */
+        background-color: #18181b;
+        color: #fafafa;
       }
       .dark ::selection {
-        background-color: #fafafa; /* zinc-50 */
-        color: #18181b; /* zinc-900 */
+        background-color: #fafafa;
+        color: #18181b;
       }
     </style>
 
-    <!-- Google Fonts: Optimized non-blocking loading -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    </noscript>
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "KokoSend",
-      "applicationCategory": "CommunicationApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": "A secure, client-side tool for sending messages to Discord and Telegram."
-    }
-    </script>
-
-    <!-- Tailwind CSS -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -112,9 +83,6 @@
                 800: '#27272a',
                 900: '#18181b',
                 950: '#09090b',
-              },
-              discord: {
-                blurple: '#5865F2',
               }
             }
           }
@@ -123,21 +91,21 @@
     </script>
 
     <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "react-dom": "https://esm.sh/react-dom@^19.2.3/",
-    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "react-markdown": "https://esm.sh/react-markdown@9",
-    "date-fns": "https://esm.sh/date-fns@3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
-  }
-}
-</script>
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.3",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "vite": "https://esm.sh/vite@^7.3.1",
+        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+        "react-dom": "https://esm.sh/react-dom@^19.2.3/",
+        "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
+        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+        "react-markdown": "https://esm.sh/react-markdown@9",
+        "date-fns": "https://esm.sh/date-fns@3",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+      }
+    }
+    </script>
   </head>
   <body class="bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300">
     <div id="root"></div>

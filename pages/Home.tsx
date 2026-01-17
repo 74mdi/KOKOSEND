@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, ArrowRight } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 
 interface HomeProps {
   isDarkMode: boolean;
@@ -50,30 +50,32 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
         </button>
       </header>
 
-      {/* Main Content Area - Taking up height to push footer down on mobile */}
+      {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-start justify-center px-6 md:px-12 max-w-4xl animate-in fade-in duration-700 slide-in-from-bottom-4 py-20">
-        <div className="space-y-8">
-          <p className="text-2xl md:text-4xl text-zinc-800 dark:text-zinc-200 font-serif leading-relaxed tracking-tight font-medium max-w-xl">
-            SALAM ANA{' '}
-            <span className={`inline-block transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-md opacity-0 scale-95' : 'blur-0 opacity-100 scale-100'}`}>
+        <div className="space-y-12">
+          {/* Fixed row alignment for 'SALAM ANA [name]' */}
+          <div className="text-2xl md:text-4xl text-zinc-800 dark:text-zinc-200 font-serif leading-none tracking-tight font-medium flex items-center gap-x-2 whitespace-nowrap overflow-visible">
+            <span>SALAM ANA</span>
+            <span className={`inline-block min-w-[3ch] transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-md opacity-0' : 'blur-0 opacity-100'}`}>
               {names[nameIndex]}
             </span>.
-          </p>
+          </div>
           
           {showLaunchButton && (
-            <button 
-              onClick={() => navigate('/koko')}
-              className="group inline-flex items-center gap-3 px-8 py-4 bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-full font-medium transition-all hover:ring-4 hover:ring-zinc-100 dark:hover:ring-zinc-800 active:scale-95 shadow-xl shadow-zinc-200 dark:shadow-zinc-950 outline-none"
-              aria-label="Launch KokoSend Application"
-            >
-              Launch KokoSend
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            <div>
+              <button 
+                onClick={() => navigate('/koko')}
+                className="text-xl md:text-2xl font-normal text-zinc-900 dark:text-zinc-100 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-8 hover:decoration-zinc-900 dark:hover:decoration-zinc-200 transition-all"
+                aria-label="Launch KokoSend Application"
+              >
+                Writing
+              </button>
+            </div>
           )}
         </div>
       </main>
 
-      {/* Footer Area - Styled as per reference image */}
+      {/* Footer Area */}
       <footer className="flex-none mt-20 pb-20 px-6 md:px-12 max-w-4xl w-full animate-in fade-in duration-1000 delay-300">
         <div className="border-t border-zinc-100 dark:border-zinc-900 pt-16 space-y-10">
           
@@ -85,7 +87,7 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
                 href="https://instagram.com/qaiik" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-800 dark:hover:decoration-zinc-200"
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
               >
                 @qaiik
               </a>
@@ -94,14 +96,14 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
                 href="https://tiktok.com" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-800 dark:hover:decoration-zinc-200"
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
               >
                 toktok
               </a>
               <span className="text-zinc-300 dark:text-zinc-800" aria-hidden="true">·</span>
               <a 
                 href="mailto:contact@kokosend.app" 
-                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-800 dark:hover:decoration-zinc-200"
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
               >
                 Email
               </a>

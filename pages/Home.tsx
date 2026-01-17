@@ -1,30 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, ArrowRight, Instagram, Mail } from 'lucide-react';
+import { Sun, Moon, ArrowRight } from 'lucide-react';
 
 interface HomeProps {
   isDarkMode: boolean;
   setIsDarkMode: (value: boolean) => void;
   navigate: (path: string) => void;
 }
-
-// Simple TikTok Icon since Lucide might not have it in older versions
-const TikTokIcon = ({ className }: { className?: string }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="24" 
-    height="24" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-    aria-hidden="true"
-  >
-    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-  </svg>
-);
 
 export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps) {
   const [time, setTime] = useState(new Date());
@@ -46,36 +27,35 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
   useEffect(() => {
     const interval = setInterval(() => {
       setIsBlurry(true);
-      // Wait for blur out
       setTimeout(() => {
         setNameIndex((prev) => (prev + 1) % names.length);
         setIsBlurry(false);
       }, 500);
-    }, 2000); // Change every 2 seconds
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 transition-colors duration-500 font-sans">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 transition-colors duration-500 font-sans">
       {/* Header */}
-      <header className="flex-none px-6 py-6 md:px-12 md:py-8 flex justify-between items-center z-10">
+      <header className="flex-none px-6 py-8 md:px-12 md:py-12 flex justify-between items-center z-10">
         <h1 className="text-xl md:text-2xl font-serif font-bold tracking-tight">Koko.</h1>
         <button 
           onClick={() => setIsDarkMode(!isDarkMode)} 
-          className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+          className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
           aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
         >
           {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-700 slide-in-from-bottom-4">
-        <div className="max-w-md space-y-8">
-          <p className="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 font-serif leading-relaxed tracking-wide font-medium">
+      {/* Main Content Area - Taking up height to push footer down on mobile */}
+      <main className="flex-1 flex flex-col items-start justify-center px-6 md:px-12 max-w-4xl animate-in fade-in duration-700 slide-in-from-bottom-4 py-20">
+        <div className="space-y-8">
+          <p className="text-2xl md:text-4xl text-zinc-800 dark:text-zinc-200 font-serif leading-relaxed tracking-tight font-medium max-w-xl">
             SALAM ANA{' '}
-            <span className={`inline-block transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-sm opacity-50 scale-95' : 'blur-0 opacity-100 scale-100'}`}>
+            <span className={`inline-block transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-md opacity-0 scale-95' : 'blur-0 opacity-100 scale-100'}`}>
               {names[nameIndex]}
             </span>.
           </p>
@@ -83,35 +63,57 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
           {showLaunchButton && (
             <button 
               onClick={() => navigate('/koko')}
-              className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-full font-medium transition-all hover:scale-105 active:scale-95 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/50 focus:ring-2 focus:ring-offset-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 outline-none"
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-full font-medium transition-all hover:ring-4 hover:ring-zinc-100 dark:hover:ring-zinc-800 active:scale-95 shadow-xl shadow-zinc-200 dark:shadow-zinc-950 outline-none"
               aria-label="Launch KokoSend Application"
             >
               Launch KokoSend
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           )}
         </div>
       </main>
 
-      {/* Footer Area */}
-      <footer className="flex-none flex flex-col items-center gap-8 pb-10 px-6 animate-in fade-in duration-1000 delay-200">
-        
-        {/* Links */}
-        <div className="flex items-center gap-8">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50 transition-colors" aria-label="Visit Instagram">
-            <Instagram className="w-5 h-5" />
-          </a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50 transition-colors" aria-label="Visit TikTok">
-            <TikTokIcon className="w-5 h-5" />
-          </a>
-          <a href="mailto:contact@kokosend.app" className="text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50 transition-colors" aria-label="Send Email">
-            <Mail className="w-5 h-5" />
-          </a>
-        </div>
+      {/* Footer Area - Styled as per reference image */}
+      <footer className="flex-none mt-20 pb-20 px-6 md:px-12 max-w-4xl w-full animate-in fade-in duration-1000 delay-300">
+        <div className="border-t border-zinc-100 dark:border-zinc-900 pt-16 space-y-10">
+          
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Connect</h3>
+            
+            <nav className="flex flex-wrap items-center gap-2 text-base md:text-lg">
+              <a 
+                href="https://instagram.com/qaiik" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-800 dark:hover:decoration-zinc-200"
+              >
+                @qaiik
+              </a>
+              <span className="text-zinc-300 dark:text-zinc-800" aria-hidden="true">·</span>
+              <a 
+                href="https://tiktok.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-800 dark:hover:decoration-zinc-200"
+              >
+                toktok
+              </a>
+              <span className="text-zinc-300 dark:text-zinc-800" aria-hidden="true">·</span>
+              <a 
+                href="mailto:contact@kokosend.app" 
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-800 dark:hover:decoration-zinc-200"
+              >
+                Email
+              </a>
+            </nav>
+          </div>
 
-        {/* Time - Improved Contrast for Accessibility */}
-        <div className="text-xs font-mono text-zinc-700 dark:text-zinc-300 tracking-widest uppercase">
-          {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          {/* Time Display */}
+          <div className="pt-10">
+            <div className="text-sm font-mono text-zinc-400 dark:text-zinc-600 tracking-wider">
+              {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).toUpperCase()}
+            </div>
+          </div>
         </div>
       </footer>
     </div>

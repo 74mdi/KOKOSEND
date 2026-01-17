@@ -28,6 +28,9 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 
 export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps) {
   const [time, setTime] = useState(new Date());
+  
+  // Check for secret access parameter
+  const showLaunchButton = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('koko');
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -55,14 +58,16 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
             "Simplicity is the ultimate sophistication."
           </p>
           
-          <button 
-            onClick={() => navigate('/koko')}
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-full font-medium transition-all hover:scale-105 active:scale-95 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/50 focus:ring-2 focus:ring-offset-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 outline-none"
-            aria-label="Launch KokoSend Application"
-          >
-            Launch KokoSend
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          {showLaunchButton && (
+            <button 
+              onClick={() => navigate('/koko')}
+              className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-full font-medium transition-all hover:scale-105 active:scale-95 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/50 focus:ring-2 focus:ring-offset-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 outline-none"
+              aria-label="Launch KokoSend Application"
+            >
+              Launch KokoSend
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
         </div>
       </main>
 

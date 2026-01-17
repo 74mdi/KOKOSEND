@@ -69,6 +69,31 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
     storage.set('koko-config', JSON.stringify(config));
   }, [config]);
 
+  // Security & Privacy: Prevent Search Engine Indexing for the App Page
+  useEffect(() => {
+    const metaRobots = document.querySelector('meta[name="robots"]');
+    const originalContent = metaRobots?.getAttribute('content');
+
+    // Force noindex for this private route
+    if (metaRobots) {
+      metaRobots.setAttribute('content', 'noindex, nofollow, noarchive');
+    } else {
+      const newMeta = document.createElement('meta');
+      newMeta.name = 'robots';
+      newMeta.content = 'noindex, nofollow, noarchive';
+      document.head.appendChild(newMeta);
+    }
+
+    return () => {
+      // Restore original or default to index when leaving
+      if (metaRobots && originalContent) {
+        metaRobots.setAttribute('content', originalContent);
+      } else if (metaRobots) {
+        metaRobots.setAttribute('content', 'index, follow');
+      }
+    };
+  }, []);
+
   // --- Handlers ---
   const handleFileSelect = (files: FileList | null) => {
     if (files && files.length > 0) {
@@ -369,20 +394,20 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
         <div className="space-y-6">
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-wider font-mono text-zinc-500">Destinations</p>
-            <button onClick={() => togglePlatform('discord')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.discord ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-500 border-zinc-200 dark:border-zinc-800'}`} aria-pressed={platforms.discord}>
+            <button onClick={() => togglePlatform('discord')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.discord ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-700 border-zinc-200 dark:border-zinc-800 dark:text-zinc-300'}`} aria-pressed={platforms.discord}>
               <Bot className="w-5 h-5" /> <span className="font-medium">Discord</span>
             </button>
-            <button onClick={() => togglePlatform('telegram')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.telegram ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-500 border-zinc-200 dark:border-zinc-800'}`} aria-pressed={platforms.telegram}>
+            <button onClick={() => togglePlatform('telegram')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.telegram ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-700 border-zinc-200 dark:border-zinc-800 dark:text-zinc-300'}`} aria-pressed={platforms.telegram}>
               <Send className="w-5 h-5" /> <span className="font-medium">Telegram</span>
             </button>
           </div>
         </div>
 
         <div className="mt-auto pt-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
-           <button onClick={() => setIsHistoryOpen(true)} className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="View history">
+           <button onClick={() => setIsHistoryOpen(true)} className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="View history">
              <Clock className="w-4 h-4" /> <span>History</span>
            </button>
-           <button onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Open settings">
+           <button onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="Open settings">
              <Settings className="w-4 h-4" />
            </button>
         </div>
@@ -415,7 +440,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                           ? 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300' 
                           : val === 'error' 
                             ? 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20 text-red-700 dark:text-red-400' 
-                            : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400'
+                            : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300'
                       }`}
                     >
                         {val === 'success' 
@@ -648,7 +673,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
           </div>
 
           <div className="flex-none mt-4 text-center">
-              <p className="text-xs text-zinc-400 font-mono">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
                 KokoSend securely processes requests client-side.
               </p>
           </div>

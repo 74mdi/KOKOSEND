@@ -73,7 +73,7 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-700 slide-in-from-bottom-4">
         <div className="max-w-md space-y-8">
-          <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 font-serif leading-relaxed tracking-wide font-medium">
+          <p className="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 font-serif leading-relaxed tracking-wide font-medium">
             SALAM ANA{' '}
             <span className={`inline-block transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-sm opacity-50 scale-95' : 'blur-0 opacity-100 scale-100'}`}>
               {names[nameIndex]}
@@ -98,19 +98,19 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
         
         {/* Links */}
         <div className="flex items-center gap-8">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="Visit Instagram">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50 transition-colors" aria-label="Visit Instagram">
             <Instagram className="w-5 h-5" />
           </a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="Visit TikTok">
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50 transition-colors" aria-label="Visit TikTok">
             <TikTokIcon className="w-5 h-5" />
           </a>
-          <a href="mailto:contact@kokosend.app" className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="Send Email">
+          <a href="mailto:contact@kokosend.app" className="text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50 transition-colors" aria-label="Send Email">
             <Mail className="w-5 h-5" />
           </a>
         </div>
 
         {/* Time - Improved Contrast for Accessibility */}
-        <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 tracking-widest uppercase">
+        <div className="text-xs font-mono text-zinc-700 dark:text-zinc-300 tracking-widest uppercase">
           {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
         </div>
       </footer>

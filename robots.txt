@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /koko
+
+Sitemap: https://kokosend.app/sitemap.xml

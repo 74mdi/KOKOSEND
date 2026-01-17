@@ -3,25 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KokoSend | Minimalist Message Dispatcher</title>
-    <meta name="description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
+    <title>KokoSend | Secure & Minimalist Message Dispatcher</title>
+    <meta name="description" content="Send messages to Discord Webhooks and Telegram Bots securely from your browser. No server-side storage, 100% client-side, minimalist interface." />
+    <meta name="keywords" content="Discord Webhook Sender, Telegram Bot Sender, Client-side Messaging, Secure Message Dispatcher, KokoSend" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://kokosend.app/" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://kokosend.app/" />
-    <meta property="og:title" content="KokoSend" />
-    <meta property="og:description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
+    <meta property="og:title" content="KokoSend | Secure Message Dispatcher" />
+    <meta property="og:description" content="A minimalist, secure client-side message dispatcher for Discord and Telegram. No login required." />
+    <meta property="og:site_name" content="KokoSend" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="KokoSend" />
     <meta property="twitter:description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
 
-    <!-- Google Fonts: Simplified to standard weights to prevent MIME errors -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "KokoSend",
+      "applicationCategory": "CommunicationApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A secure, client-side tool for sending messages to Discord and Telegram."
+    }
+    </script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -57,21 +78,35 @@
         }
       }
     </script>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "react-markdown": "https://esm.sh/react-markdown@9",
-    "date-fns": "https://esm.sh/date-fns@3"
-  }
-}
-</script>
-</head>
+    
+    <!-- Custom Styles for Typography & Selection -->
+    <style>
+      /* Typographic Selection Color: High contrast inverse */
+      ::selection {
+        background-color: #18181b; /* Zinc 900 */
+        color: #fafafa; /* Zinc 50 */
+      }
+      .dark ::selection {
+        background-color: #fafafa; /* Zinc 50 */
+        color: #18181b; /* Zinc 900 */
+      }
+    </style>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.3",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "vite": "https://esm.sh/vite@^7.3.1",
+        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+        "react-markdown": "https://esm.sh/react-markdown@9",
+        "date-fns": "https://esm.sh/date-fns@3"
+      }
+    }
+    </script>
+  </head>
   <body class="bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>

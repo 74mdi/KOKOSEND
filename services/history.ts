@@ -32,5 +32,9 @@ export const addToHistory = (item: Omit<HistoryItem, 'id' | 'timestamp'>) => {
 };
 
 export const clearHistory = () => {
-  localStorage.removeItem(STORAGE_KEY);
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) {
+    console.error('Failed to clear history', e);
+  }
 };

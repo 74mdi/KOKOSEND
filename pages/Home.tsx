@@ -71,13 +71,13 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
         
         {/* Links */}
         <div className="flex items-center gap-8">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Visit Instagram">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="Visit Instagram">
             <Instagram className="w-5 h-5" />
           </a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Visit TikTok">
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="Visit TikTok">
             <TikTokIcon className="w-5 h-5" />
           </a>
-          <a href="mailto:contact@kokosend.app" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Send Email">
+          <a href="mailto:contact@kokosend.app" className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors" aria-label="Send Email">
             <Mail className="w-5 h-5" />
           </a>
         </div>

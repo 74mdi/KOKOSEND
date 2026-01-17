@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import Home from './pages/Home';
-import KokoSend from './pages/KokoSend';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { storage } from './services/history';
+
+// Lazy load pages to split the bundle and improve initial load time
+const Home = lazy(() => import('./pages/Home'));
+const KokoSend = lazy(() => import('./pages/KokoSend'));
+
+// Minimalist Loading Spinner
+const PageLoader = () => (
+  <div className="min-h-[100dvh] flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+    <div className="w-8 h-8 border-4 border-zinc-200 border-t-zinc-900 dark:border-zinc-800 dark:border-t-zinc-50 rounded-full animate-spin"></div>
+  </div>
+);
 
 export default function App() {
   // --- Theme State ---
@@ -39,7 +48,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       {currentPath === '/koko' ? (
         <KokoSend 
           isDarkMode={isDarkMode} 
@@ -53,6 +62,6 @@ export default function App() {
           navigate={navigate} 
         />
       )}
-    </>
+    </Suspense>
   );
 }

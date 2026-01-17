@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://kokosend.app/" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
-    <!-- Performance Hints: Preconnect to critical origins -->
+    <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
@@ -29,12 +29,36 @@
     <meta property="twitter:title" content="KokoSend" />
     <meta property="twitter:description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
 
-    <!-- Google Fonts: Optimized for Non-Blocking Load -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    </noscript>
+    <!-- Critical CSS: Prevents FOUC (Flash of Unstyled Content) for background colors -->
+    <style>
+      body {
+        background-color: #fafafa;
+        color: #18181b;
+        margin: 0;
+      }
+      .dark body {
+        background-color: #09090b;
+        color: #fafafa;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #09090b;
+          color: #fafafa;
+        }
+      }
+      /* Typographic Selection: High Contrast Inverse */
+      ::selection {
+        background-color: #18181b; /* zinc-900 */
+        color: #fafafa; /* zinc-50 */
+      }
+      .dark ::selection {
+        background-color: #fafafa; /* zinc-50 */
+        color: #18181b; /* zinc-900 */
+      }
+    </style>
+
+    <!-- Google Fonts: Standard loading with swap to prevent LCP delay on fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -87,19 +111,6 @@
         }
       }
     </script>
-    
-    <!-- Custom Styles for Typography & Selection -->
-    <style>
-      /* Typographic Selection Color: High contrast Orange for visibility */
-      ::selection {
-        background-color: #f97316; /* orange-500 */
-        color: #ffffff;
-      }
-      .dark ::selection {
-        background-color: #fb923c; /* orange-400 */
-        color: #000000;
-      }
-    </style>
 
     <script type="importmap">
     {

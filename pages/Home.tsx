@@ -53,19 +53,20 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-start justify-center px-6 md:px-12 max-w-4xl animate-in fade-in duration-700 slide-in-from-bottom-4 py-20">
         <div className="space-y-12">
-          {/* Fixed row alignment for 'SALAM ANA [name]' */}
-          <div className="text-2xl md:text-4xl text-zinc-800 dark:text-zinc-200 font-serif leading-none tracking-tight font-medium flex items-center gap-x-2 whitespace-nowrap overflow-visible">
+          {/* Forced single row alignment for 'SALAM ANA [name]' */}
+          <div className="text-2xl md:text-4xl text-zinc-900 dark:text-zinc-100 font-serif leading-none tracking-tight font-medium flex flex-row items-center whitespace-nowrap overflow-visible">
             <span>SALAM ANA</span>
-            <span className={`inline-block min-w-[3ch] transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-md opacity-0' : 'blur-0 opacity-100'}`}>
+            <span className={`inline-block mx-2 min-w-[3ch] transition-all duration-500 ease-in-out transform ${isBlurry ? 'blur-md opacity-0' : 'blur-0 opacity-100'}`}>
               {names[nameIndex]}
-            </span>.
+            </span>
+            <span>.</span>
           </div>
           
           {showLaunchButton && (
             <div>
               <button 
                 onClick={() => navigate('/koko')}
-                className="text-xl md:text-2xl font-normal text-zinc-900 dark:text-zinc-100 underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-8 hover:decoration-zinc-900 dark:hover:decoration-zinc-200 transition-all"
+                className="text-lg md:text-xl font-normal text-zinc-800 dark:text-zinc-200 border-b border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-zinc-100 transition-all pb-0.5"
                 aria-label="Launch KokoSend Application"
               >
                 Writing
@@ -87,7 +88,7 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
                 href="https://instagram.com/qaiik" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-200 dark:decoration-zinc-800 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
               >
                 @qaiik
               </a>
@@ -96,14 +97,14 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
                 href="https://tiktok.com" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-200 dark:decoration-zinc-800 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
               >
                 toktok
               </a>
               <span className="text-zinc-300 dark:text-zinc-800" aria-hidden="true">·</span>
               <a 
                 href="mailto:contact@kokosend.app" 
-                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-300 dark:decoration-zinc-700 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
+                className="text-zinc-800 dark:text-zinc-200 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors underline underline-offset-4 decoration-zinc-200 dark:decoration-zinc-800 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
               >
                 Email
               </a>

@@ -37,16 +37,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" aria-modal="true" role="dialog">
       <div 
         className="absolute inset-0 bg-white/60 dark:bg-zinc-950/80 backdrop-blur-md" 
         onClick={onClose}
+        aria-hidden="true"
       ></div>
       
       <div className="relative w-full max-w-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="flex justify-between items-center p-6 border-b border-zinc-100 dark:border-zinc-800">
           <h2 className="text-xl font-serif font-bold text-zinc-900 dark:text-zinc-50">Configuration</h2>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" aria-label="Close settings">
             <X className="w-5 h-5 text-zinc-500" />
           </button>
         </div>
@@ -60,6 +61,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
                 key={preset.name}
                 onClick={() => loadPreset(preset.name)}
                 className="px-3 py-1.5 text-xs font-mono border border-zinc-200 dark:border-zinc-700 rounded-full hover:bg-zinc-900 hover:text-white dark:hover:bg-zinc-50 dark:hover:text-zinc-900 transition-colors"
+                aria-label={`Load preset ${preset.name}`}
               >
                 {preset.name}
               </button>

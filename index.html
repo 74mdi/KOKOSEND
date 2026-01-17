@@ -7,6 +7,8 @@
     <meta name="description" content="Send messages to Discord Webhooks and Telegram Bots securely from your browser. No server-side storage, 100% client-side, minimalist interface." />
     <meta name="keywords" content="Discord Webhook Sender, Telegram Bot Sender, Client-side Messaging, Secure Message Dispatcher, KokoSend" />
     <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
     <link rel="canonical" href="https://kokosend.app/" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
     
@@ -22,9 +24,12 @@
     <meta property="twitter:title" content="KokoSend" />
     <meta property="twitter:description" content="Secure, client-side message dispatcher for Discord Webhooks and Telegram Bots." />
 
-    <!-- Google Fonts -->
+    <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
     <!-- JSON-LD Structured Data -->
@@ -81,14 +86,14 @@
     
     <!-- Custom Styles for Typography & Selection -->
     <style>
-      /* Typographic Selection Color: High contrast inverse */
+      /* Typographic Selection Color: High contrast Orange for visibility */
       ::selection {
-        background-color: #18181b; /* Zinc 900 */
-        color: #fafafa; /* Zinc 50 */
+        background-color: #f97316; /* orange-500 */
+        color: #ffffff;
       }
       .dark ::selection {
-        background-color: #fafafa; /* Zinc 50 */
-        color: #18181b; /* Zinc 900 */
+        background-color: #fb923c; /* orange-400 */
+        color: #000000;
       }
     </style>
 

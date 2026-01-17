@@ -34,10 +34,11 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose, onR
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" aria-modal="true" role="dialog">
       <div 
         className="absolute inset-0 bg-white/60 dark:bg-zinc-950/80 backdrop-blur-md" 
         onClick={onClose}
+        aria-hidden="true"
       ></div>
       
       <div className="relative w-full max-w-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
@@ -48,11 +49,11 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose, onR
           </div>
           <div className="flex gap-2">
             {items.length > 0 && (
-                <button onClick={handleClear} className="p-2 rounded-lg hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors" title="Clear All">
+                <button onClick={handleClear} className="p-2 rounded-lg hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors" title="Clear All" aria-label="Clear all history">
                     <Trash2 className="w-5 h-5" />
                 </button>
             )}
-            <button onClick={onClose} className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+            <button onClick={onClose} className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" aria-label="Close history">
                 <X className="w-5 h-5 text-zinc-500" />
             </button>
           </div>
@@ -82,6 +83,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({ isOpen, onClose, onR
                                     onClick={() => handleRestore(item.text)}
                                     className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all text-zinc-500"
                                     title="Restore Message"
+                                    aria-label="Restore message"
                                 >
                                     <RefreshCw className="w-3 h-3" />
                                 </button>

@@ -22,7 +22,7 @@ import {
 import { SettingsModal } from '../components/SettingsModal';
 import { HistoryModal } from '../components/HistoryModal';
 import { sendToDiscord, sendToTelegram } from '../services/integrations';
-import { addToHistory } from '../services/history';
+import { addToHistory, storage } from '../services/history';
 import { AppConfig, SendingStatus, Attachment, DiscordEmbed } from '../types';
 import { DEFAULT_CONFIG } from '../presets';
 
@@ -35,11 +35,10 @@ interface KokoSendProps {
 export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSendProps) {
   // --- State ---
   const [config, setConfig] = useState<AppConfig>(() => {
+    const saved = storage.get('koko-config');
     try {
-      const saved = localStorage.getItem('koko-config');
       return saved ? JSON.parse(saved) : DEFAULT_CONFIG;
-    } catch (e) {
-      console.warn("LocalStorage access restricted, using default config.");
+    } catch {
       return DEFAULT_CONFIG;
     }
   });
@@ -67,11 +66,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
 
   // --- Effects ---
   useEffect(() => {
-    try {
-      localStorage.setItem('koko-config', JSON.stringify(config));
-    } catch (e) {
-      // Ignore storage errors in restricted environments
-    }
+    storage.set('koko-config', JSON.stringify(config));
   }, [config]);
 
   // --- Handlers ---
@@ -96,7 +91,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
       if (validFiles.length > 0) {
         const newAttachments: Attachment[] = validFiles.map(file => ({
           file,
-          id: crypto.randomUUID(),
+          id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString() + Math.random(),
           preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
         }));
         setAttachments(prev => [...prev, ...newAttachments]);
@@ -348,15 +343,15 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
       
       {/* Header (Mobile Only) */}
       <header className="flex-none md:hidden sticky top-0 z-40 px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl flex justify-between items-center">
-        <button onClick={() => navigate('/')} className="text-xl font-serif font-semibold tracking-tight">KokoSend</button>
+        <button onClick={() => navigate('/')} className="text-xl font-serif font-semibold tracking-tight" aria-label="Go to home">KokoSend</button>
         <div className="flex gap-2">
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors" aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}>
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <button onClick={() => setIsHistoryOpen(true)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
+            <button onClick={() => setIsHistoryOpen(true)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors" aria-label="View history">
               <Clock className="w-5 h-5" />
             </button>
-            <button onClick={() => setIsSettingsOpen(true)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
+            <button onClick={() => setIsSettingsOpen(true)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors" aria-label="Open settings">
               <Settings className="w-5 h-5" />
             </button>
         </div>
@@ -365,8 +360,8 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
       {/* Sidebar */}
       <aside className="hidden md:flex w-full md:w-64 lg:w-72 h-full border-r border-zinc-200 dark:border-zinc-800 p-6 flex-col bg-white dark:bg-zinc-950 transition-colors duration-300">
         <div className="flex justify-between items-center mb-10">
-          <button onClick={() => navigate('/')} className="text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity">KokoSend</button>
-          <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
+          <button onClick={() => navigate('/')} className="text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity" aria-label="Go to home">KokoSend</button>
+          <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors" aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}>
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
         </div>
@@ -374,20 +369,20 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
         <div className="space-y-6">
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-wider font-mono text-zinc-500">Destinations</p>
-            <button onClick={() => togglePlatform('discord')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.discord ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-500 border-zinc-200 dark:border-zinc-800'}`}>
+            <button onClick={() => togglePlatform('discord')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.discord ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-500 border-zinc-200 dark:border-zinc-800'}`} aria-pressed={platforms.discord}>
               <Bot className="w-5 h-5" /> <span className="font-medium">Discord</span>
             </button>
-            <button onClick={() => togglePlatform('telegram')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.telegram ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-500 border-zinc-200 dark:border-zinc-800'}`}>
+            <button onClick={() => togglePlatform('telegram')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ease-out active:scale-[0.98] ${platforms.telegram ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-transparent text-zinc-500 border-zinc-200 dark:border-zinc-800'}`} aria-pressed={platforms.telegram}>
               <Send className="w-5 h-5" /> <span className="font-medium">Telegram</span>
             </button>
           </div>
         </div>
 
         <div className="mt-auto pt-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
-           <button onClick={() => setIsHistoryOpen(true)} className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
+           <button onClick={() => setIsHistoryOpen(true)} className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="View history">
              <Clock className="w-4 h-4" /> <span>History</span>
            </button>
-           <button onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
+           <button onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Open settings">
              <Settings className="w-4 h-4" />
            </button>
         </div>
@@ -399,10 +394,10 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
         
           {/* Mobile Platform Toggles */}
           <div className="flex-none flex md:hidden gap-3 mb-4">
-            <button onClick={() => togglePlatform('discord')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-all ${platforms.discord ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900' : 'bg-white dark:bg-zinc-900 text-zinc-500 border-zinc-200'}`}>
+            <button onClick={() => togglePlatform('discord')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-all ${platforms.discord ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900' : 'bg-white dark:bg-zinc-900 text-zinc-500 border-zinc-200'}`} aria-pressed={platforms.discord}>
               <Bot className="w-5 h-5" /> <span>Discord</span>
             </button>
-            <button onClick={() => togglePlatform('telegram')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-all ${platforms.telegram ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900' : 'bg-white dark:bg-zinc-900 text-zinc-500 border-zinc-200'}`}>
+            <button onClick={() => togglePlatform('telegram')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-all ${platforms.telegram ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900' : 'bg-white dark:bg-zinc-900 text-zinc-500 border-zinc-200'}`} aria-pressed={platforms.telegram}>
               <Send className="w-5 h-5" /> <span>Telegram</span>
             </button>
           </div>
@@ -437,6 +432,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                                 disabled={isSending}
                                 className="p-1 hover:bg-red-200 dark:hover:bg-red-900/40 rounded transition-colors disabled:opacity-50"
                                 title="Retry"
+                                aria-label={`Retry ${key}`}
                             >
                                 <RefreshCw className={`w-4 h-4 ${isSending ? 'animate-spin' : ''}`} />
                             </button>
@@ -488,12 +484,14 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                       value={embedConfig.title}
                       onChange={e => setEmbedConfig(p => ({...p, title: e.target.value}))}
                       className="flex-1 px-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-indigo-100 dark:border-indigo-900/30 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      aria-label="Embed title"
                     />
                     <input 
                       type="color" 
                       value={embedConfig.color}
                       onChange={e => setEmbedConfig(p => ({...p, color: e.target.value}))}
                       className="w-10 h-[38px] p-0.5 rounded-lg bg-white dark:bg-zinc-900 border border-indigo-100 dark:border-indigo-900/30 cursor-pointer"
+                      aria-label="Embed color"
                     />
                  </div>
                  <textarea
@@ -501,6 +499,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                     value={embedConfig.description}
                     onChange={e => setEmbedConfig(p => ({...p, description: e.target.value}))}
                     className="w-full px-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-indigo-100 dark:border-indigo-900/30 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none h-20"
+                    aria-label="Embed description"
                  />
               </div>
             )}
@@ -514,6 +513,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                 placeholder={showEmbedBuilder ? "Add regular message content (optional)..." : "Type your message here... (Supports Markdown, paste images)"}
                 className="flex-1 resize-none bg-transparent p-4 md:p-6 outline-none text-base md:text-lg text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 font-mono overflow-y-auto"
                 spellCheck={false}
+                aria-label="Message editor"
               />
             ) : (
               <div className="flex-1 p-6 overflow-y-auto bg-zinc-50 dark:bg-zinc-900/50">
@@ -580,7 +580,11 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                       <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-mono">{att.file.name.split('.').pop()} • {(att.file.size / 1024).toFixed(0)}KB</span>
                     </div>
 
-                    <button onClick={() => removeAttachment(att.id)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 transition-colors">
+                    <button 
+                        onClick={() => removeAttachment(att.id)} 
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 transition-colors"
+                        aria-label={`Remove attachment ${att.file.name}`}
+                    >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
@@ -595,7 +599,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                   {/* Left: Tools */}
                   <div className="w-full md:w-auto flex items-center justify-between md:justify-start gap-4">
                       <div className="flex items-center gap-4">
-                          <button onClick={() => fileInputRef.current?.click()} className="p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 transition-colors group relative" title="Attach file">
+                          <button onClick={() => fileInputRef.current?.click()} className="p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 transition-colors group relative" title="Attach file" aria-label="Attach file">
                             <Paperclip className="w-5 h-5 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors" />
                           </button>
                           <span className="text-xs font-mono text-zinc-400">
@@ -605,7 +609,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                       </div>
                       
                       {(message || attachments.length > 0 || (showEmbedBuilder && embedConfig.title)) && (
-                        <button onClick={handleClear} className="md:hidden p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 transition-colors" title="Clear message">
+                        <button onClick={handleClear} className="md:hidden p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 transition-colors" title="Clear message" aria-label="Clear message">
                           <Trash2 className="w-5 h-5" />
                         </button>
                       )}
@@ -614,7 +618,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                   {/* Right: Actions */}
                   <div className="w-full md:w-auto flex items-center gap-3">
                      {(message || attachments.length > 0 || (showEmbedBuilder && embedConfig.title)) && (
-                       <button onClick={handleClear} className="hidden md:block p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 transition-colors" title="Clear message">
+                       <button onClick={handleClear} className="hidden md:block p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 transition-colors" title="Clear message" aria-label="Clear message">
                          <Trash2 className="w-5 h-5" />
                        </button>
                      )}
@@ -623,6 +627,7 @@ export default function KokoSend({ isDarkMode, setIsDarkMode, navigate }: KokoSe
                       onClick={handleSend}
                       disabled={isSending || (!message.trim() && attachments.length === 0 && (!showEmbedBuilder || !embedConfig.title))}
                       className="w-full md:w-auto px-8 py-3 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-200 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/20 group relative flex items-center justify-center min-w-[160px]"
+                      aria-label="Send Message"
                      >
                         {isSending ? (
                            <Clock className="w-5 h-5 animate-pulse" />

@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import KokoSend from './pages/KokoSend';
+import { storage } from './services/history';
 
 export default function App() {
   // --- Theme State ---
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('koko-theme');
-        if (saved) return saved === 'dark';
-        return window.matchMedia('(prefers-color-scheme: dark)').matches;
-      } catch (e) {
-        // Fallback for environments where localStorage is blocked (SecurityError)
-        return window.matchMedia('(prefers-color-scheme: dark)').matches;
-      }
+      const saved = storage.get('koko-theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   });
@@ -21,23 +17,14 @@ export default function App() {
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
-      try {
-        localStorage.setItem('koko-theme', 'dark');
-      } catch (e) {
-        // Ignore storage errors
-      }
+      storage.set('koko-theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
-      try {
-        localStorage.setItem('koko-theme', 'light');
-      } catch (e) {
-        // Ignore storage errors
-      }
+      storage.set('koko-theme', 'light');
     }
   }, [isDarkMode]);
 
   // --- Routing State ---
-  // Simple manual router to avoid heavy dependencies on raw ESM environment
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
@@ -51,10 +38,6 @@ export default function App() {
     setCurrentPath(path);
   };
 
-  // Basic Route Matching
-  // If user lands on /koko directly, show KokoSend
-  // Otherwise show Home
-  
   return (
     <>
       {currentPath === '/koko' ? (

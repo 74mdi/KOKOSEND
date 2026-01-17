@@ -20,6 +20,7 @@ const TikTokIcon = ({ className }: { className?: string }) => (
     strokeLinecap="round" 
     strokeLinejoin="round" 
     className={className}
+    aria-hidden="true"
   >
     <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
   </svg>
@@ -41,6 +42,7 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
         <button 
           onClick={() => setIsDarkMode(!isDarkMode)} 
           className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+          aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
         >
           {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
@@ -55,7 +57,8 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
           
           <button 
             onClick={() => navigate('/koko')}
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-full font-medium transition-all hover:scale-105 active:scale-95 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/50"
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900 rounded-full font-medium transition-all hover:scale-105 active:scale-95 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/50 focus:ring-2 focus:ring-offset-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 outline-none"
+            aria-label="Launch KokoSend Application"
           >
             Launch KokoSend
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -68,19 +71,19 @@ export default function Home({ isDarkMode, setIsDarkMode, navigate }: HomeProps)
         
         {/* Links */}
         <div className="flex items-center gap-8">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Instagram">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Visit Instagram">
             <Instagram className="w-5 h-5" />
           </a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="TikTok">
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Visit TikTok">
             <TikTokIcon className="w-5 h-5" />
           </a>
-          <a href="mailto:contact@kokosend.app" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Email">
+          <a href="mailto:contact@kokosend.app" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" aria-label="Send Email">
             <Mail className="w-5 h-5" />
           </a>
         </div>
 
-        {/* Time */}
-        <div className="text-xs font-mono text-zinc-300 dark:text-zinc-700 tracking-widest uppercase">
+        {/* Time - Improved Contrast for Accessibility */}
+        <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 tracking-widest uppercase">
           {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
         </div>
       </footer>
